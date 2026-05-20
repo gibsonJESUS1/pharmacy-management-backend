@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2021",
+
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    "declaration": true,
+    "sourceMap": true,
+    "removeComments": true,
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+
+    "strict": false,
+    "skipLibCheck": true,
+
+    "paths": {
+      "*": ["./*"]
+    }
+  },
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

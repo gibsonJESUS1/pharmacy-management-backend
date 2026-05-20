@@ -1,0 +1,91 @@
+generator client {
+ provider = "prisma-client-js"
+}
+datasource db {
+ provider = "postgresql"
+ url = env("DATABASE_URL")
+}
+enum Role {
+ CUSTOMER
+ PHARMACIST
+ ADMIN
+}
+enum PrescriptionStatus {
+ PENDING
+ APPROVED
+ REJECTED
+}
+enum OrderStatus {
+ PENDING
+ PAID
+ PROCESSING
+ SHIPPED
+ DELIVERED
+ CANCELLED
+}
+model User {
+ id String @id @default(uuid())
+ email String @unique
+ passwordHash String
+ firstName String
+ lastName String
+ role Role @default(CUSTOMER)
+ isActive Boolean @default(true)
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ prescriptions Prescription[]
+ orders Order[]
+}
+model Product {
+ id String @id @default(uuid())
+ name String
+ slug String @unique
+ description String
+ price Float
+ stockQuantity Int
+ prescriptionRequired Boolean @default(false)
+ isActive Boolean @default(true)
+ createdAt DateTime @default(now())
+ orderItems OrderItem[]
+}
+model Prescription {
+  id         String @id @default(uuid())
+
+  fileName   String
+
+  fileUrl    String
+
+  notes      String?
+
+  status     PrescriptionStatus @default(PENDING)
+
+  reviewedBy String?
+
+  reviewedAt DateTime?
+
+  customerId String
+
+  customer   User @relation(fields: [customerId], references: [id])
+
+  createdAt  DateTime @default(now())
+
+  updatedAt  DateTime @updatedAt
+}
+model Order {
+ id String @id @default(uuid())
+ totalAmount Float
+ status OrderStatus @default(PENDING)
+ createdAt DateTime @default(now())
+ userId String
+ user User @relation(fields: [userId], references: [id])
+ items OrderItem[]
+}
+model OrderItem {
+ id String @id @default(uuid())
+ quantity Int
+ unitPrice Float
+ orderId String
+ order Order @relation(fields: [orderId], references: [id])
+ productId String
+ product Product @relation(fields: [productId], references: [id])
+}
