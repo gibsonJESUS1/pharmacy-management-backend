@@ -16,8 +16,36 @@ export class ProductsRepository {
     });
   }
 
-  findAll() {
-    return this.prisma.product.findMany();
+  findAll(query: any) {
+    const { page, limit, prescriptionRequired, isActive, sort, order } = query;
+
+    return this.prisma.product.findMany({
+      skip: (page - 1) * limit,
+
+      take: limit,
+
+      where: {
+        ...(prescriptionRequired !== undefined
+          ? {
+              prescriptionRequired: prescriptionRequired === "true",
+            }
+          : {}),
+
+        ...(isActive !== undefined
+          ? {
+              isActive: isActive === "true",
+            }
+          : {}),
+      },
+
+      orderBy: sort
+        ? {
+            [sort]: order || "desc",
+          }
+        : {
+            createdAt: "desc",
+          },
+    });
   }
 
   findOne(id: string) {

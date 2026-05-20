@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  Query,
 } from "@nestjs/common";
 
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
@@ -25,21 +26,21 @@ import { UpdateProductDto } from "../dto/update-product.dto";
 
 import { ProductsService } from "../services/products.service";
 
+import { PaginationQueryDto } from "../../../common/dto/pagination-query.dto";
+import { ProductsQueryDto } from "../dto/products-query.dto";
+
 @ApiTags("Products")
 @Controller("products")
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  findAll(
+    @Query()
+    query: ProductsQueryDto,
+  ) {
+    return this.productsService.findAll(query);
   }
-
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.productsService.findOne(id);
-  }
-
   @ApiBearerAuth("access-token")
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.PHARMACIST)

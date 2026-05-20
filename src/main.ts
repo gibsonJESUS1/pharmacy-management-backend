@@ -4,6 +4,8 @@ import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import helmet from "helmet";
 import compression from "compression";
 import { AppModule } from "./app.module";
+import { HttpExceptionFilter } from "./common/filters/http-exception.filter";
+import { TransformResponseInterceptor } from "./common/interceptors/transform-response.interceptor";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   6;
@@ -17,6 +19,8 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalInterceptors(new TransformResponseInterceptor());
   const config = new DocumentBuilder()
     .setTitle("Pharmacy API")
     .setDescription("Production Pharmacy Backend")

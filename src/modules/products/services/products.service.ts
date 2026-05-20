@@ -14,10 +14,9 @@ export class ProductsService {
     return this.productsRepository.create(data);
   }
 
-  findAll() {
-    return this.productsRepository.findAll();
+  findAll(query: any) {
+    return this.productsRepository.findAll(query);
   }
-
   findOne(id: string) {
     return this.productsRepository.findOne(id);
   }

@@ -5,14 +5,20 @@ A scalable pharmacy backend system built with NestJS, Prisma, and PostgreSQL.
 ## Features
 
 - JWT Authentication
-- Role-Based Access Control (RBAC)
-- Product Management
+- RBAC Authorization
+- Products Management
 - Prescription Workflow
-- Swagger API Documentation
+- Transactional Order System
+- Inventory Management
+- Pagination
+- Filtering
+- Sorting
+- Swagger Documentation
 - Prisma ORM
 - PostgreSQL
 - Docker Support
-- Repository Pattern Architecture
+- Global Exception Filters
+- Response Interceptors
 
 ## Roles
 
