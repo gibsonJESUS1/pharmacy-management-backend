@@ -44,8 +44,8 @@ npm install
 Create `.env`
 
 ```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/pharmacy
-JWT_SECRET=supersecret
+DATABASE_URL=postgresql:postgr_url
+JWT_SECRET=ur_secret_c
 JWT_EXPIRES_IN=7d
 ```
 
