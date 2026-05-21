@@ -13,6 +13,7 @@ import { Roles } from "../../common/decorators/roles.decorator";
 import { RolesGuard } from "./guards/roles.guard";
 
 import { Role } from "../../common/enums/role.enum";
+import { Throttle } from "@nestjs/throttler";
 
 @Controller("auth")
 export class AuthController {
@@ -23,6 +24,12 @@ export class AuthController {
     return this.authService.register(body);
   }
 
+  @Throttle({
+    default: {
+      limit: 5,
+      ttl: 60000,
+    },
+  })
   @Post("login")
   async login(@Body() body: LoginDto) {
     return this.authService.login(body.email, body.password);

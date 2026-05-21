@@ -5,6 +5,11 @@ import { CreateProductDto } from "../dto/create-product.dto";
 import { UpdateProductDto } from "../dto/update-product.dto";
 
 import { ProductsRepository } from "../repositories/products.repository";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
+
+import { Inject } from "@nestjs/common";
+
+import { Cache } from "cache-manager";
 
 @Injectable()
 export class ProductsService {
