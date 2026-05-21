@@ -27,28 +27,33 @@ Built with NestJS, TypeScript, PostgreSQL, Prisma ORM, Docker, Redis, and scalab
 # Tech Stack
 
 ## Backend
+
 - NestJS
 - Node.js
 - TypeScript
 - Express.js
 
 ## Database & ORM
+
 - PostgreSQL
 - Prisma ORM
 
 ## Infrastructure & DevOps
+
 - Docker
 - Redis
 - GitHub Actions
 - Railway
 
 ## Authentication & Security
+
 - JWT Authentication
 - Refresh Tokens
 - Role-Based Access Control
 - Password Hashing
 
 ## Documentation & Testing
+
 - Swagger / OpenAPI
 - Jest
 - Supertest
