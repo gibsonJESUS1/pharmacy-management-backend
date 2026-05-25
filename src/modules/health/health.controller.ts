@@ -1,5 +1,7 @@
 import { Controller, Get } from "@nestjs/common";
 
+import { SkipThrottle } from "@nestjs/throttler";
+
 import {
   HealthCheck,
   HealthCheckService,
@@ -19,6 +21,7 @@ export class HealthController {
   ) {}
 
   @Get()
+  @SkipThrottle()
   @HealthCheck()
   async check() {
     return this.health.check([

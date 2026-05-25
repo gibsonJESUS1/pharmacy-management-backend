@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: pharmacy-api
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: pharmacy-api
+
+  template:
+    metadata:
+      labels:
+        app: pharmacy-api
+
+    spec:
+      containers:
+        - name: pharmacy-api
+
+          image: pharmacy-backend:v5
+
+          ports:
+            - containerPort: 3000
+
+          env:
+            - name: JWT_EXPIRES_IN
+              valueFrom:
+                configMapKeyRef:
+                  name: pharmacy-config
+                  key: JWT_EXPIRES_IN
+
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: pharmacy-config
+                  key: REDIS_HOST
+
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: pharmacy-config
+                  key: REDIS_PORT
+
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: pharmacy-secret
+                  key: JWT_SECRET
+
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: pharmacy-secret
+                  key: DATABASE_URL
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+
+            initialDelaySeconds: 10
+
+            periodSeconds: 5
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+
+            initialDelaySeconds: 20
+
+            periodSeconds: 10

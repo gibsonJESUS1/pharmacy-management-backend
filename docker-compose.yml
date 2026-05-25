@@ -1,21 +1,64 @@
-version: '3.8'
+version: '3.9'
 
 services:
-  api:
+  app:
     build: .
+
+    container_name: pharmacy-api
+
     ports:
       - '3000:3000'
+
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/pharmacy
+
+      JWT_SECRET: supersecret
+
+      JWT_EXPIRES_IN: 7d
+
+      REDIS_HOST: redis
+
+      REDIS_PORT: 6379
+
     depends_on:
       - postgres
-    env_file:
-      - .env
+      - redis
+
+    command: >
+      sh -c "
+      npx prisma migrate deploy &&
+      node dist/main
+      "
 
   postgres:
     image: postgres:16
+
+    container_name: pharmacy-postgres
+
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: pharmacy
+
     ports:
       - '5432:5432'
+
+    environment:
+      POSTGRES_USER: postgres
+
+      POSTGRES_PASSWORD: postgres
+
+      POSTGRES_DB: pharmacy
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+
+    container_name: pharmacy-redis
+
+    restart: always
+
+    ports:
+      - '6379:6379'
+
+volumes:
+  postgres_data:
