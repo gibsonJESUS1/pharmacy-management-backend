@@ -1,162 +1,140 @@
-# Pharmacy Management Backend
+# Cloud-Native Pharmacy Backend
 
-Production-grade backend infrastructure for pharmacy operations, inventory management, authentication workflows, prescription handling, payment processing, and operational reporting.
-
-Built with NestJS, TypeScript, PostgreSQL, Prisma ORM, Docker, Redis, and scalable backend architecture principles.
+A scalable cloud-native pharmacy backend built with NestJS, Prisma, PostgreSQL, Redis, Docker, and Kubernetes.
 
 ---
 
-# Features
+## Overview
 
-- JWT Authentication & Refresh Token Flows
-- Role-Based Access Control (RBAC)
-- Pharmacy Inventory Management
-- Prescription & Order Workflows
-- Payment Processing Integration
-- Redis Caching
-- Queue-Based Processing
-- Swagger/OpenAPI Documentation
-- Dockerized Deployment
-- CI/CD Ready Architecture
-- Centralized Exception Handling
-- Validation Pipelines
-- Scalable Modular Backend Architecture
+This project is a production-oriented backend system designed for managing pharmacy operations such as:
+
+- User Authentication & Authorization
+- Product Management
+- Prescription Processing
+- Order Management
+- Inventory Handling
+- Health Monitoring
+- Infrastructure Scaling
+
+The system was designed with backend engineering, cloud-native deployment, and infrastructure reliability in mind.
 
 ---
 
-# Tech Stack
+## Tech Stack
 
-## Backend
-
+### Backend
 - NestJS
-- Node.js
 - TypeScript
-- Express.js
-
-## Database & ORM
-
-- PostgreSQL
 - Prisma ORM
-
-## Infrastructure & DevOps
-
-- Docker
+- PostgreSQL
 - Redis
-- GitHub Actions
-- Railway
 
-## Authentication & Security
+### Infrastructure
+- Docker
+- Kubernetes
+- Horizontal Pod Autoscaling (HPA)
 
+### Authentication & Security
 - JWT Authentication
-- Refresh Tokens
-- Role-Based Access Control
-- Password Hashing
+- Role-Based Access Control (RBAC)
+- Request Throttling
 
-## Documentation & Testing
-
-- Swagger / OpenAPI
-- Jest
-- Supertest
-- Postman
+### Documentation & Monitoring
+- Swagger API Documentation
+- Health Checks
+- Structured Logging
 
 ---
 
-# System Architecture
+## Features
 
-The application follows a modular backend architecture using feature-based module organization and service-layer separation.
-
-Core architectural principles include:
-
-- Modular service organization
-- Scalable API design
-- Separation of concerns
-- DTO validation pipelines
-- Centralized exception handling
-- Environment-based configuration
-- Queue-based asynchronous workflows
-- Dockerized deployment workflows
-
----
-
-# Core Modules
-
-- Authentication Module
-- Users Module
-- Pharmacy Inventory Module
-- Orders Module
-- Payments Module
-- Notifications Module
-- Reporting Module
+- JWT Authentication & Authorization
+- Role-Based Access Control (RBAC)
+- Product CRUD Management
+- Prescription Approval Workflow
+- Order Creation & Status Management
+- Redis Caching
+- Structured Logging with Pino
+- Health Monitoring with Terminus
+- Kubernetes Deployments
+- ConfigMaps & Secrets
+- Horizontal Scaling with HPA
+- Docker Multi-Stage Builds
+- Production Readiness & Liveness Probes
 
 ---
 
-# API Documentation
+## Architecture
 
-Swagger/OpenAPI documentation available at:
+### Application Layer
+- Modular NestJS Architecture
+- DTO Validation
+- Service & Repository Pattern
+
+### Data Layer
+- PostgreSQL Database
+- Prisma ORM
+- Redis Cache Layer
+
+### Infrastructure Layer
+- Dockerized Services
+- Kubernetes Deployments
+- Kubernetes Services
+- ConfigMaps
+- Secrets
+- Health Probes
+- Horizontal Scaling
+
+---
+
+## Project Structure
 
 ```bash
-/api/docs
+src/
+├── common/
+├── infrastructure/
+├── modules/
+│   ├── auth/
+│   ├── products/
+│   ├── orders/
+│   ├── prescriptions/
+│   └── health/
+
+k8s/
+├── app-deployment.yaml
+├── app-service.yaml
+├── postgres-deployment.yaml
+├── postgres-service.yaml
+├── redis-deployment.yaml
+├── redis-service.yaml
+├── configmap.yaml
+├── secret.yaml
+└── hpa.yaml
 ```
 
 ---
 
-# Authentication Flow
+## Local Development
 
-The backend uses JWT-based authentication with:
-
-- Access Tokens
-- Refresh Tokens
-- Protected Routes
-- Role-Based Authorization Guards
-
----
-
-# Docker Setup
-
-## Build Containers
-
-```bash
-docker-compose up --build
-```
-
-## Stop Containers
-
-```bash
-docker-compose down
-```
-
----
-
-# Environment Variables
-
-Create a `.env` file:
-
-```env
-DATABASE_URL=
-JWT_SECRET=
-JWT_REFRESH_SECRET=
-REDIS_HOST=
-REDIS_PORT=
-PORT=
-```
-
----
-
-# Installation
-
-## Clone Repository
-
-```bash
-git clone https://github.com/gibsonJESUS1/pharmacy-management-backend.git
-```
-
-## Install Dependencies
+### Install Dependencies
 
 ```bash
 npm install
 ```
 
-## Run Development Server
+### Generate Prisma Client
+
+```bash
+npx prisma generate
+```
+
+### Run Database Migrations
+
+```bash
+npx prisma migrate dev
+```
+
+### Start Development Server
 
 ```bash
 npm run start:dev
@@ -164,53 +142,149 @@ npm run start:dev
 
 ---
 
-# Testing
+## Environment Variables
 
-Run unit and API tests:
+Create a `.env` file:
 
-```bash
-npm run test
+```env
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/pharmacy
+JWT_SECRET=supersecret
+JWT_EXPIRES_IN=7d
+REDIS_HOST=localhost
+REDIS_PORT=6379
 ```
 
 ---
 
-# CI/CD
+## Docker
 
-The project is structured for CI/CD workflows using GitHub Actions with automated:
+### Build Docker Image
 
-- Dependency installation
-- Linting
-- Testing
-- Build validation
+```bash
+docker build -t pharmacy-backend .
+```
 
----
+### Run Container
 
-# Future Improvements
-
-- Advanced observability & monitoring
-- Background job processing
-- Notification queues
-- Distributed caching
-- Microservice extraction
-- Kubernetes deployment workflows
+```bash
+docker run -p 3000:3000 pharmacy-backend
+```
 
 ---
 
-# Engineering Focus
+## Kubernetes Deployment
 
-This project focuses on:
+### Apply Kubernetes Resources
 
-- Scalable backend architecture
-- Production-ready API systems
-- Backend maintainability
-- Service reliability
-- Operational workflow automation
-- Backend deployment infrastructure
+```bash
+kubectl apply -f k8s/
+```
+
+### Verify Pods
+
+```bash
+kubectl get pods
+```
+
+### Port Forward Service
+
+```bash
+kubectl port-forward service/pharmacy-api-service 3000:80
+```
 
 ---
 
-# Author
+## Health Monitoring
+
+The application includes production-grade health checks using NestJS Terminus.
+
+### Health Features
+- Readiness Probes
+- Liveness Probes
+- Database Connectivity Checks
+- Memory Heap Monitoring
+
+### Health Endpoint
+
+```bash
+GET /health
+```
+
+---
+
+## Swagger API Documentation
+
+After starting the application:
+
+```bash
+http://localhost:3000/docs
+```
+
+---
+
+## Scaling
+
+Horizontal Pod Autoscaling (HPA) is configured for the API deployment.
+
+### Scaling Features
+- CPU-Based Scaling
+- Automatic Replica Management
+- Kubernetes Load Distribution
+
+---
+
+## Security
+
+- JWT Authentication
+- Role-Based Authorization
+- Secret Management with Kubernetes Secrets
+- Request Throttling
+- Health Endpoint Throttle Exclusion
+
+---
+
+## Logging
+
+Structured logging implemented using:
+
+- nestjs-pino
+- Request Logging
+- Error Tracking
+- HTTP Request Monitoring
+
+---
+
+## Future Improvements
+
+- CI/CD Pipeline with GitHub Actions
+- Docker Registry Integration
+- Automated Kubernetes Deployments
+- Prometheus & Grafana Monitoring
+- BullMQ Queue Processing
+- Helm Charts
+- API Versioning
+- Distributed Tracing
+- Cloud Deployment (AWS/GCP/Azure)
+
+---
+
+## Lessons & Engineering Focus
+
+This project focuses heavily on:
+
+- Backend Engineering
+- Infrastructure Engineering
+- Cloud-Native Architecture
+- Containerization
+- Deployment Automation
+- Runtime Debugging
+- Kubernetes Operations
+- Production Readiness
+
+---
+
+## Author
 
 Tosin Owolabi
 
-Backend Engineer focused on scalable APIs, backend architecture, distributed systems, and production engineering workflows.
+Backend Engineer | Cloud-Native Backend Development | Infrastructure & Platform Engineering
