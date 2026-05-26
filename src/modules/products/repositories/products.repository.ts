@@ -16,38 +16,40 @@ export class ProductsRepository {
     });
   }
 
-  findAll(query: any) {
-    const { page, limit, prescriptionRequired, isActive, sort, order } = query;
+  // findAll(query: any) {
+  //   const { page, limit, prescriptionRequired, isActive, sort, order } = query;
 
-    return this.prisma.product.findMany({
-      skip: (page - 1) * limit,
+  //   return this.prisma.product.findMany({
+  //     skip: (page - 1) * limit,
 
-      take: limit,
+  //     take: limit,
 
-      where: {
-        ...(prescriptionRequired !== undefined
-          ? {
-              prescriptionRequired: prescriptionRequired === "true",
-            }
-          : {}),
+  //     where: {
+  //       ...(prescriptionRequired !== undefined
+  //         ? {
+  //             prescriptionRequired: prescriptionRequired === "true",
+  //           }
+  //         : {}),
 
-        ...(isActive !== undefined
-          ? {
-              isActive: isActive === "true",
-            }
-          : {}),
-      },
+  //       ...(isActive !== undefined
+  //         ? {
+  //             isActive: isActive === "true",
+  //           }
+  //         : {}),
+  //     },
 
-      orderBy: sort
-        ? {
-            [sort]: order || "desc",
-          }
-        : {
-            createdAt: "desc",
-          },
-    });
+  //     orderBy: sort
+  //       ? {
+  //           [sort]: order || "desc",
+  //         }
+  //       : {
+  //           createdAt: "desc",
+  //         },
+  //   });
+  // }
+  findAll() {
+    return this.prisma.product.findMany();
   }
-
   findOne(id: string) {
     return this.prisma.product.findUnique({
       where: { id },
