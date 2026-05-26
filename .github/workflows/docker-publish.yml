@@ -28,11 +28,11 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ghcr.io/${{ github.repository }}/pharmacy-backend
+          images: ghcr.io/gibsonjesus1/pharmacy-backend
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}/pharmacy-backend:latest
+          tags: ghcr.io/gibsonjesus1/pharmacy-backend:latest
