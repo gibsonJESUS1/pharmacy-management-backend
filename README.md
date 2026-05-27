@@ -23,6 +23,7 @@ The system was designed with backend engineering, cloud-native deployment, and i
 ## Tech Stack
 
 ### Backend
+
 - NestJS
 - TypeScript
 - Prisma ORM
@@ -30,16 +31,19 @@ The system was designed with backend engineering, cloud-native deployment, and i
 - Redis
 
 ### Infrastructure
+
 - Docker
 - Kubernetes
 - Horizontal Pod Autoscaling (HPA)
 
 ### Authentication & Security
+
 - JWT Authentication
 - Role-Based Access Control (RBAC)
 - Request Throttling
 
 ### Documentation & Monitoring
+
 - Swagger API Documentation
 - Health Checks
 - Structured Logging
@@ -67,16 +71,19 @@ The system was designed with backend engineering, cloud-native deployment, and i
 ## Architecture
 
 ### Application Layer
+
 - Modular NestJS Architecture
 - DTO Validation
 - Service & Repository Pattern
 
 ### Data Layer
+
 - PostgreSQL Database
 - Prisma ORM
 - Redis Cache Layer
 
 ### Infrastructure Layer
+
 - Dockerized Services
 - Kubernetes Deployments
 - Kubernetes Services
@@ -199,6 +206,7 @@ kubectl port-forward service/pharmacy-api-service 3000:80
 The application includes production-grade health checks using NestJS Terminus.
 
 ### Health Features
+
 - Readiness Probes
 - Liveness Probes
 - Database Connectivity Checks
@@ -227,6 +235,7 @@ http://localhost:3000/docs
 Horizontal Pod Autoscaling (HPA) is configured for the API deployment.
 
 ### Scaling Features
+
 - CPU-Based Scaling
 - Automatic Replica Management
 - Kubernetes Load Distribution
@@ -280,6 +289,63 @@ This project focuses heavily on:
 - Runtime Debugging
 - Kubernetes Operations
 - Production Readiness
+
+---
+
+## Production Deployment Lessons Learned
+
+During Kubernetes deployment, the application health checks passed successfully, but business endpoints returned HTTP 500 errors.
+
+### Root Cause
+
+Prisma migrations had not been applied to the PostgreSQL database running inside Kubernetes.
+
+As a result:
+
+- PostgreSQL was reachable
+- Prisma could connect successfully
+- Health endpoint returned healthy status
+- Application tables did not exist
+
+### Symptoms
+
+- GET /health returned 200 OK
+- GET /products returned 500 Internal Server Error
+- PostgreSQL database contained no tables
+
+### Investigation Process
+
+1. Verified Kubernetes Pods were healthy
+2. Verified Redis and PostgreSQL connectivity
+3. Verified Prisma database connection
+4. Inspected PostgreSQL database directly
+5. Discovered no relations existed (`\dt`)
+6. Confirmed migration files existed inside the application container
+7. Applied migrations manually
+
+### Resolution
+
+```bash
+npx prisma migrate deploy
+```
+
+### Result
+
+Database tables were created successfully:
+
+- User
+- Product
+- Prescription
+- Order
+- OrderItem
+- \_prisma_migrations
+
+The application immediately began serving requests successfully.
+
+### Key Learning
+
+Application health checks alone do not guarantee application readiness.
+Database schema deployment must be part of the deployment pipeline.
 
 ---
 
