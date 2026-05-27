@@ -188,6 +188,38 @@ Deployment Verification
       GHCR
 ```
 
+## Screenshots
+
+### Kubernetes Deployment
+
+Application pods running successfully in Kubernetes.
+
+![Kubernetes Pods](screenshots/k8s-pods.png)
+
+### Kubernetes Services
+
+Service discovery and networking configuration.
+
+![Kubernetes Services](screenshots/k8s-svc.png)
+
+### API Documentation Overview
+
+Swagger documentation showing available API modules.
+
+![Swagger Overview](screenshots/default.png)
+
+### Products & Prescriptions API
+
+Endpoints for product and prescription management.
+
+![Products & Prescriptions](screenshots/product-prescription.png)
+
+### Orders API
+
+Order management endpoints.
+
+![Orders API](screenshots/orders.png)
+
 ---
 
 ## Production Deployment Lessons Learned
